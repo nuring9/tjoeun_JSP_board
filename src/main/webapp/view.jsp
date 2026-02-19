@@ -1,66 +1,46 @@
-<%@ page contentType="text/html;charset=UTF-8"%>
-<%@ page import="dto.BoardDto"%>
-
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="dto.BoardDto" %>
 <%
-BoardDto dto = (BoardDto) request.getAttribute("dto");
+    // Controller에서 보낸 "dto" 객체를 가져옵니다.
+    BoardDto dto = (BoardDto) request.getAttribute("dto");
 %>
-
 <!DOCTYPE html>
 <html>
 <head>
-<title>게시글 상세보기</title>
-
-<!-- Bootstrap CSS -->
-<link
-	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-	rel="stylesheet">
+    <meta charset="UTF-8">
+    <title>게시글 상세보기</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-
 <body>
-	<div class="container mt-5">
 
-		<h2 class="text-center mb-4">게시글 상세보기</h2>
+<div class="container mt-5">
+    <div class="card shadow-sm border-dark">
+        <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">게시글 상세보기</h5>
+            <span class="badge bg-secondary">번호: <%= dto.getId() %></span>
+        </div>
 
-		<div class="card shadow-sm border-dark">
+        <div class="card-body">
+            <div class="mb-4 pb-2 border-bottom">
+                <h3 class="fw-bold"><%= dto.getTitle() %></h3>
+                <div class="text-muted small d-flex justify-content-between">
+                    <span>작성자: <strong><%= dto.getWriter() %></strong></span>
+                    <span>작성일: <%= dto.getRegdate() %></span>
+                </div>
+            </div>
 
-			<!-- 상단 검정 배경 -->
-			<div class="card-header bg-dark text-white">
-				<h5 class="mb-0"><%=dto.getTitle()%></h5>
-			</div>
+            <div class="mb-5" style="min-height: 200px; white-space: pre-wrap;"><%= dto.getContent() %></div>
 
-			<div class="card-body">
+            <div class="text-end border-top pt-3">
+                <a href="board?action=edit&id=<%= dto.getId() %>" class="btn btn-dark">수정하기</a>
+                <a href="board?action=delete&id=<%= dto.getId() %>" 
+                   class="btn btn-outline-danger" 
+                   onclick="return confirm('정말 삭제하시겠습니까?')">삭제</a>
+                <a href="board?action=list" class="btn btn-secondary">목록으로</a>
+            </div>
+        </div>
+    </div>
+</div>
 
-				<div class="row mb-3">
-					<div class="col-md-4">
-						<strong>번호</strong> :
-						<%=dto.getId()%></div>
-					<div class="col-md-4">
-						<strong>작성자</strong> :
-						<%=dto.getWriter()%></div>
-					<div class="col-md-4">
-						<strong>작성일</strong> :
-						<%=dto.getRegdate()%></div>
-				</div>
-
-				<hr>
-
-				<div class="mb-4">
-					<pre class="fs-6"><%=dto.getContent()%></pre>
-				</div>
-
-				<div class="text-end">
-					<a href="board?action=list" class="btn btn-secondary">목록</a> 
-					<a href="board?action=write" class="btn btn-dark">글쓰기</a> 
-					<a href="board?action=edit&id=<%=dto.getId()%>" class="btn btn-dark"
-						onclick="return confirm('수정하시겠습니까?')"> 수정 </a> 
-				    <a href="board?action=delete&id=<%=dto.getId()%>"
-						class="btn btn-danger" onclick="return confirm('정말 삭제하시겠습니까?')">
-						삭제 </a>
-				</div>
-
-			</div>
-		</div>
-
-	</div>
 </body>
 </html>
