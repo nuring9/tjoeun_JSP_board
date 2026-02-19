@@ -32,7 +32,9 @@
             <div class="mb-5" style="min-height: 200px; white-space: pre-wrap;"><%= dto.getContent() %></div>
 
             <div class="text-end border-top pt-3">
-                <a href="board?action=edit&id=<%= dto.getId() %>" class="btn btn-dark">수정하기</a>
+               <a href="board?action=edit&id=<%= dto.getId() %>" 
+       class="btn btn-dark"
+       onclick="return confirm('수정 페이지로 이동하시겠습니까?')">수정하기</a>
                 <a href="board?action=delete&id=<%= dto.getId() %>" 
                    class="btn btn-outline-danger" 
                    onclick="return confirm('정말 삭제하시겠습니까?')">삭제</a>
