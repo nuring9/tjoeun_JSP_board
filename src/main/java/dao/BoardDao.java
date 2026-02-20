@@ -9,7 +9,7 @@ import dto.BoardDto;
 
 public class BoardDao {
 
-	private String url = "jdbc:mysql://localhost:3306/jspboard?serverTimezone=Asia/Seoul&useSSL=false";
+	private String url = "jdbc:mysql://localhost:3306/jspboard?serverTimezone=Asia/Seoul&useSSL=false&allowPublicKeyRetrieval=true";;
 	// useSSL=false SSL 암호화 연결 끄기
 	private String user = "root";
 	private String password = "1234";
