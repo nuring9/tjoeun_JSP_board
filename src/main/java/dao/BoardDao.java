@@ -36,27 +36,30 @@ public class BoardDao {
 	}
 
 	// 목록 조회
-	public List<BoardDto> getList() throws Exception {
+	public List<BoardDto> getList(int start, int pageSize) throws Exception {
 
-		List<BoardDto> list = new ArrayList<>();
-		String sql = "SELECT * FROM board ORDER BY id DESC";
+	    List<BoardDto> list = new ArrayList<>();
+	    String sql = "SELECT * FROM board ORDER BY id DESC LIMIT ?, ?";
 
-		try (Connection conn = getConnection();
-				PreparedStatement pstmt = conn.prepareStatement(sql);
-				ResultSet rs = pstmt.executeQuery()) {
+	    try (Connection conn = getConnection();
+	         PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-			while (rs.next()) {
-				BoardDto dto = new BoardDto();
-				dto.setId(rs.getInt("id"));
-				dto.setTitle(rs.getString("title"));
-				dto.setContent(rs.getString("content"));
-				dto.setWriter(rs.getString("writer"));
-				dto.setRegdate(rs.getString("regdate"));
+	        pstmt.setInt(1, start);
+	        pstmt.setInt(2, pageSize);
 
-				list.add(dto);
-			}
-		}
-		return list;
+	        ResultSet rs = pstmt.executeQuery();
+
+	        while (rs.next()) {
+	            BoardDto dto = new BoardDto();
+	            dto.setId(rs.getInt("id"));
+	            dto.setTitle(rs.getString("title"));
+	            dto.setContent(rs.getString("content"));
+	            dto.setWriter(rs.getString("writer"));
+	            dto.setRegdate(rs.getString("regdate"));
+	            list.add(dto);
+	        }
+	    }
+	    return list;
 	}
 
    //  상세 조회
@@ -116,5 +119,20 @@ public class BoardDao {
 			pstmt.executeUpdate();
 		}
 		
+	}
+	
+	
+	// 페이지네이션 게시글 개수 조회 추가
+	public int getTotalCount() throws Exception {
+	    String sql = "SELECT COUNT(*) FROM board";
+	    try (Connection conn = getConnection();
+	         PreparedStatement pstmt = conn.prepareStatement(sql);
+	         ResultSet rs = pstmt.executeQuery()) {
+
+	        if (rs.next()) {
+	            return rs.getInt(1);
+	        }
+	    }
+	    return 0;
 	}
 }

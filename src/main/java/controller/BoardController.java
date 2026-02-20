@@ -20,8 +20,23 @@ public class BoardController extends HttpServlet {
 
 			if (action == null || action.equals("list")) {
 				// 목록 보기
-				List<BoardDto> list = dao.getList();
+				int page = 1;
+				if (request.getParameter("page") != null) {
+					page = Integer.parseInt(request.getParameter("page"));
+				}
+
+				int pageSize = 10;
+				int start = (page - 1) * pageSize;
+
+				int totalCount = dao.getTotalCount();
+				int totalPage = (int) Math.ceil((double) totalCount / pageSize);
+
+				List<BoardDto> list = dao.getList(start, pageSize);
+
 				request.setAttribute("list", list);
+				request.setAttribute("currentPage", page);
+				request.setAttribute("totalPage", totalPage);
+
 				request.getRequestDispatcher("list.jsp").forward(request, response);
 			} else if (action.equals("view")) {
 				// 상세보기
@@ -38,11 +53,11 @@ public class BoardController extends HttpServlet {
 				// 글쓰기 페이지 이동
 				request.getRequestDispatcher("write.jsp").forward(request, response);
 			} else if (action.equals("edit")) {
-			    // 수정 페이지 이동
+				// 수정 페이지 이동
 				int id = Integer.parseInt(request.getParameter("id"));
-			    BoardDto dto = dao.getBoard(id);
-			    request.setAttribute("dto", dto);
-			    request.getRequestDispatcher("edit.jsp").forward(request, response);
+				BoardDto dto = dao.getBoard(id);
+				request.setAttribute("dto", dto);
+				request.getRequestDispatcher("edit.jsp").forward(request, response);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
